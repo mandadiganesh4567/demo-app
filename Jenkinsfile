@@ -56,8 +56,8 @@ pipeline{
         stage('Image Building'){
             steps {
                 sh """
-                    sudo docker build -t ${APPNAME}:${APP_VERSION} .
-                    sudo docker images 
+                    docker build -t ${APPNAME}:${APP_VERSION} .
+                    docker images 
                 """
             }
         }
@@ -67,8 +67,8 @@ pipeline{
                 sh """
                     aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
 
-                    sudo docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
-                    sudo docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
+                    docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
+                    docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
                 """
                 }
             }
