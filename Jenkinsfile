@@ -101,12 +101,7 @@ pipeline{
     }
     post {
         always {
-            echo "Build finished"
-        }
-        cleanup {
-            cleanWs()
-        }
-        post {
+            post {
   success {
     slackSend(channel: '#new-channel', color: 'good',
       message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nImage: demo-app:1.0.0\n${env.BUILD_URL}")
@@ -124,5 +119,10 @@ pipeline{
     cleanWs()
   }
 }
+        }
+        cleanup {
+            cleanWs()
+        }
+        
     }
 } 
