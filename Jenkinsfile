@@ -64,19 +64,31 @@ pipeline{
                 }
             }
         }
-        stage('ECR Pushing'){
-            steps {
-                withAWS(credentials: 'aws-creds', region: "${REGION}") {
-                sh """
-                    aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
+        // stage('ECR Pushing'){
+        //     steps {
+        //         withAWS(credentials: 'aws-creds', region: "${REGION}") {
+        //         sh """
+        //             aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
 
-                    docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
-                    docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${REPO_NAME}:${APP_VERSION}
-                """
-                }
-            }
+        //             docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
+        //             docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${REPO_NAME}:${APP_VERSION}
+        //         """
+        //         }
+        //     }
+        // }
+      stage('ECR Pushing') {
+    steps {
+        withAWS(credentials: 'aws-creds', region: "${REGION}") {
+            sh """
+                aws ecr get-login-password --region ${REGION} | \
+                  docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com
+
+                docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${APP_VERSION}
+                docker push ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${APP_VERSION}
+            """
         }
-      
+    }
+}
 
     }
     post {
