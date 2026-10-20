@@ -56,10 +56,12 @@ pipeline{
         // }
         stage('Image Building'){
             steps {
+                script{
                 sh """
                     docker build -t ${APPNAME}:${APP_VERSION} .
                     docker images 
                 """
+                }
             }
         }
         stage('ECR Pushing'){
