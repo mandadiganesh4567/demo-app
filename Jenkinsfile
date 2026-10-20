@@ -9,6 +9,7 @@ pipeline{
         APPNAME = 'demo-app'
         REGION = 'us-east-1'
         ACC_ID = '816600798829'
+        REPO_NAME = 'ganesh/docker'
     }
     stages{
         stage('Read Version') {
@@ -68,7 +69,7 @@ pipeline{
                     aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
 
                     docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
-                    docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
+                    docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${REPO_NAME}:${APP_VERSION}
                 """
                 }
             }
