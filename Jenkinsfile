@@ -36,25 +36,25 @@ pipeline{
                 """
             }
         }
-        // stage('SonarQube Scan') {
-        //     environment {
-        //         scannerHome = tool 'sonar-scanner'
-        //     }
-        //     steps {
-        //         withSonarQubeEnv('My SonarQube Server') {
-        //             sh "${scannerHome}/bin/sonar-scanner"
-        //         }
-        //     }
-        // }
-
-        
-        stage('sonar scanning'){
-         steps {
-              withSonarQubeEnv('sonar-scan') {
-                sh 'sonar-scanner'
-              }
+        stage('SonarQube Scan') {
+            environment {
+                scannerHome = tool 'sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('sonar-scan') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
+
+        
+        // stage('sonar scanning'){
+        //  steps {
+        //       withSonarQubeEnv('sonar-scan') {
+        //         sh 'sonar-scanner'
+        //       }
+        //     }
+        // }
         stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
