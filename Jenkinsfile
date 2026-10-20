@@ -63,12 +63,14 @@ pipeline{
         }
         stage('ECR Pushing'){
             steps {
+                withCredentials([usernamePassword(credentialsId: 'aws-creds')]){
                 sh """
                     aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
 
                     sudo docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
                     sudo docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
                 """
+                }
             }
         }
       
