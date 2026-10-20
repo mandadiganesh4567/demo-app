@@ -1,7 +1,7 @@
 pipeline{
     agent {  label 'AGENT-1' }
     options {
-        disableConcurrentBuilds()
+        // disableConcurrentBuilds()
         timeout(time: 25, unit: 'MINUTES')
         timestamps()
     }
