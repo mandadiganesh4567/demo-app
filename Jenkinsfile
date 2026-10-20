@@ -47,13 +47,21 @@ pipeline{
         //     }
         // }
 
-        // stage('Quality Gate') {
-        //     steps {
-        //         timeout(time: 5, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        
+        stage('sonar scanning'){
+         steps {
+              withSonarQubeEnv('sonar-scan') {
+                sh 'sonar-scanner'
+              }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Image Building'){
             steps {
                 script{
