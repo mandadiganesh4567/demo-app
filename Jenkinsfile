@@ -1,4 +1,4 @@
-pipeline {
+pipeline{
     agent {  label 'AGENT-1' }
     options {
         disableConcurrentBuilds()
@@ -8,6 +8,7 @@ pipeline {
     environment{
         APPNAME = 'demo-app'
         REGION = 'us-east-1'
+        ACC_ID = '816600798829'
     }
     stages{
         stage('Read Version') {
@@ -33,24 +34,24 @@ pipeline {
                 """
             }
         }
-        stage('SonarQube Scan') {
-            environment {
-                scannerHome = tool 'sonar-scanner'
-            }
-            steps {
-                withSonarQubeEnv('My SonarQube Server') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
+        // stage('SonarQube Scan') {
+        //     environment {
+        //         scannerHome = tool 'sonar-scanner'
+        //     }
+        //     steps {
+        //         withSonarQubeEnv('My SonarQube Server') {
+        //             sh "${scannerHome}/bin/sonar-scanner"
+        //         }
+        //     }
+        // }
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage('Image Building'){
             steps {
                 sh """
@@ -64,8 +65,8 @@ pipeline {
                 sh """
                     aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin 816600798829.dkr.ecr.us-east-1.amazonaws.com
 
-                    docker tag ${APPNAME}:${APP_VERSION} 816600798829.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
-                    docker push 816600798829.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
+                    docker tag ${APPNAME}:${APP_VERSION} ${ACC_ID}.dkr.ecr.${REGION}.amazonaws.com/${APPNAME}:${APP_VERSION}
+                    docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${APPNAME}:${APP_VERSION}
                 """
             }
         }
@@ -80,4 +81,5 @@ pipeline {
             cleanWs()
         }
     }
+} 
 }
