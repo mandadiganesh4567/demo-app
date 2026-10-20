@@ -106,5 +106,23 @@ pipeline{
         cleanup {
             cleanWs()
         }
+        post {
+  success {
+    slackSend(channel: '#new-channel', color: 'good',
+      message: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nImage: demo-app:1.0.0\n${env.BUILD_URL}")
+  }
+  failure {
+    slackSend(channel: '#new-channel', color: 'danger',
+      message: "❌ FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}console")
+  }
+  aborted {
+    slackSend(channel: '#new-channel', color: 'warning',
+      message: "⚠️ ABORTED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}")
+  }
+  always {
+    sh 'docker rmi demo-app:1.0.0 816600798829.dkr.ecr.us-east-1.amazonaws.com/ganesh/docker:1.0.0 || true'
+    cleanWs()
+  }
+}
     }
 } 
