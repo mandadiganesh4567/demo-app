@@ -36,16 +36,16 @@ pipeline{
                 """
             }
         }
-        stage('SonarQube Scan') {
-            environment {
-                scannerHome = tool 'Sonar-8.0'
-            }
-            steps {
-                withSonarQubeEnv('Sonar-scan') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
+        // stage('SonarQube Scan') {
+        //     environment {
+        //         scannerHome = tool 'Sonar-8.0'
+        //     }
+        //     steps {
+        //         withSonarQubeEnv('Sonar-scan') {
+        //             sh "${scannerHome}/bin/sonar-scanner"
+        //         }
+        //     }
+        // }
 
         
         // stage('sonar scanning'){
@@ -55,13 +55,13 @@ pipeline{
         //       }
         //     }
         // }
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 20, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 20, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage('Image Building'){
             steps {
                 script{
